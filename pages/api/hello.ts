@@ -11,3 +11,52 @@ export default function handler(
 ) {
   res.status(200).json({ name: 'John Doe' })
 }
+
+
+const categories = [
+  "starter",
+  "legendary",
+  "mythical",
+  "ultraBeast",
+  "mega"
+];
+
+const eggGroups = [
+  "Bug",
+  "Ditto",
+  "Dragon",
+  "Fairy",
+  "Field",
+  "Flying",
+  "Grass",
+  "Gender unknown",
+  "Human-Like",
+  "Mineral",
+  "Monster",
+  "Amorphous",
+  "Undiscovered",
+  "Water 1",
+  "Water 2",
+  "Water 3"
+];
+
+const types = [
+  "Bug",
+  "Dark",
+  "Dragon",
+  "Electric",
+  "Fairy",
+  "Fighting",
+  "Fire",
+  "Flying",
+  "Ghost",
+  "Grass",
+  "Ground",
+  "Ice",
+  "Normal",
+  "Poison",
+  "Psychic",
+  "Rock",
+  "Steel",
+  "Water"
+];
