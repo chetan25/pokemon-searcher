@@ -9,6 +9,14 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  if (req.method === 'GET') {
+    const { query: { name } } = req
+
+    // const res = fetch(`https://pokeapi.glitch.me/v1/pokemon/${name}`);
+        
+  } else {
+    // Handle any other HTTP method
+  }
   res.status(200).json({ name: 'John Doe' })
 }
 

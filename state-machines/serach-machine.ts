@@ -1,4 +1,5 @@
 import { createMachine, assign } from 'xstate';
+import axios from 'axios';
 
 type SearchEvent = 
 | {
@@ -46,11 +47,8 @@ type SearchState =
 
 
 const searchPokemon = (value: string) => {
-  return fetch(`https://pokeapi.glitch.me/v1/pokemon/${value}`, {mode: 'no-cors'})
-  .then((response) => {
-    console.log('res', response);
-    return response.json()
-  });
+  // https://pokeapi.co/docs/v2#evolution-section/
+  return axios.get(`https://pokeapi.glitch.me/v1/pokemon/${value}`);
 }
 
 
