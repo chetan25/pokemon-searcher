@@ -3,26 +3,61 @@ import React, { useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import styles from '../styles/search-form.module.css';
+import { createSearchMacine } from '../state-machines/serach-machine';
+import { useMachine} from '@xstate/react';
 
 const SearchForm: NextPage = () => {
-  const [name, setName] = useState('');
+  const searchMachine = createSearchMacine(
+    'idle',
+    ''
+  );
+
+  const [state, send] = useMachine(searchMachine, {
+    // services: {
+    // }
+    // actions: {
+    // }
+  });
+
+  console.log(state);
+  const { searchKey } = state.context;
+
+  const handleFocus = () => {
+    send('ON_INPUT_FOCUS');
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+    send({
+      type: 'INPUT_CHANGED',
+      value: event.target.value
+    });
   };
+
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    send('ON_SUBMIT');
+  }
 
   return (
         <FormControl variant="standard" className={styles.formrapper}>
-        <InputLabel htmlFor="component-helper">Name</InputLabel>
+        <InputLabel htmlFor="pokemon-search">Pokemon Name</InputLabel>
         <Input
-            id="component-helper"
-            value={name}
+            id="pokemon-search"
+            value={searchKey}
             onChange={handleChange}
-            aria-describedby="component-helper-text"
+            onFocus={handleFocus}
+            aria-describedby="pokemon-search-text"
         />
-        <Button variant="outlined">Search</Button>
+        <LoadingButton
+          loading={state.matches('onSearch.submiting')}
+          loadingIndicator="Searching..." 
+          variant="outlined"
+          onClick={handleSearch}
+        >
+          Search
+        </LoadingButton>
     </FormControl>
   )
 }
