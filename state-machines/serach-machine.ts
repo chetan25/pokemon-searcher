@@ -1,7 +1,7 @@
 import { createMachine, assign } from 'xstate';
 import axios from 'axios';
 
-type SearchEvent = 
+export type SearchEvent = 
 | {
     type: 'ON_VALID_INPUT'
 } | {
@@ -19,7 +19,7 @@ export interface SearchContext {
   errorMessage: string | null;
 } 
 
-type SearchState = 
+export type SearchState = 
 | {
   value: 'idle';
   context: SearchContext
@@ -47,8 +47,7 @@ type SearchState =
 
 
 const searchPokemon = (value: string) => {
-  // https://pokeapi.co/docs/v2#evolution-section/
-  return axios.get(`https://pokeapi.glitch.me/v1/pokemon/${value}`);
+  return axios.get(`/api/pokemon/${value}`);
 }
 
 
@@ -60,9 +59,24 @@ const updatSearchValue = assign<SearchContext, any>({
 
 const updateSearchResults = assign<SearchContext, any>({
   results: (_: any, event: { data: any }) => {
-    console.log(event.data, 'data');
-    return event.data;
+   
+    return event.data.data.pokemon;
   }
+});
+
+const updateErrorState = assign<SearchContext, any>({
+  results: (_: any, event: { data: any }) => {
+    return null;
+  },
+  errorMessage: (_: any, event:any) => {
+    return event.data.message;
+  },
+})
+
+const resetResults = assign<SearchContext, any>({
+  results: (_: any, event: { data: any }) => {
+    return null;
+  },
 });
 
 const isInputValid = (context: SearchContext) => {
@@ -83,11 +97,7 @@ export const createSearchMacine = (
         errorMessage: null
       },
       states: {
-        idle: {
-          on: {
-            'ON_INPUT_FOCUS': 'inputFocus'
-          }
-        },
+        idle: { },
         inputFocus: {
           on: {
             'INPUT_CHANGED': [
@@ -105,7 +115,8 @@ export const createSearchMacine = (
               always: [
                   {
                       target: 'submiting',
-                      cond: 'isInputValid'
+                      cond: 'isInputValid',
+                      actions: 'resetResults'
                   },
                   {
                     target: '#searchMachine.inputFocus',
@@ -138,12 +149,15 @@ export const createSearchMacine = (
       on: {  
         'ON_SUBMIT':  {
             target: 'onSearch'
-        }
+        },
+        'ON_INPUT_FOCUS': 'inputFocus'
     }
    }, {
     actions: {
       updatSearchValue: updatSearchValue,
-      updateSearchResults: updateSearchResults
+      updateSearchResults: updateSearchResults,
+      updateErrorState: updateErrorState,
+      resetResults: resetResults
     },
     guards: {
       isInputValid: isInputValid

@@ -1,6 +1,0 @@
-.formrapper {
-    grid-template-columns: auto auto;
-    display: grid;
-    width: 50%;
-    grid-gap: 1rem;
-}

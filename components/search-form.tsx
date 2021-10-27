@@ -1,28 +1,29 @@
 import type { NextPage } from 'next'
-import React, { useState } from 'react';
+import React from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import LoadingButton from '@mui/lab/LoadingButton';
-import styles from '../styles/search-form.module.css';
-import { createSearchMacine } from '../state-machines/serach-machine';
-import { useMachine} from '@xstate/react';
+import { useGlobalStore } from '../hooks/machine-context';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme: any) => ({
+  formContainer: {
+    gridTemplateColumns: 'auto auto',
+    display: 'grid',
+    width: '50%',
+    gridGap: '1rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
+  },
+}));
+
 
 const SearchForm: NextPage = () => {
-  const searchMachine = createSearchMacine(
-    'idle',
-    ''
-  );
-
-  const [state, send] = useMachine(searchMachine, {
-    // services: {
-    // }
-    // actions: {
-    // }
-  });
-
-  console.log(state);
+  const [state, send] = useGlobalStore();
   const { searchKey } = state.context;
+  const styles = useStyles();
 
   const handleFocus = () => {
     send('ON_INPUT_FOCUS');
@@ -41,7 +42,7 @@ const SearchForm: NextPage = () => {
   }
 
   return (
-        <FormControl variant="standard" className={styles.formrapper}>
+    <FormControl variant="standard" className={styles.formContainer}>
         <InputLabel htmlFor="pokemon-search">Pokemon Name</InputLabel>
         <Input
             id="pokemon-search"
