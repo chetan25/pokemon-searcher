@@ -14,7 +14,8 @@ const Layout = dynamic(() => import('../components/layout'), {
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
   const { worker } = require('../mocks/browser')
   worker.start()
-}  else {
+}
+if (typeof window === 'undefined' && process.env.NODE_ENV === 'development'){
   const { server  } = require("../mocks/server");
   server.listen();
 }
