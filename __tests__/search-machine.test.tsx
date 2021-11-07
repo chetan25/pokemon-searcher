@@ -116,7 +116,7 @@ const inputFocusTest = {
 };
 
 const onSearchSubmittingTest = {
-  test: async ({ target: { getByTestId }, getPokemonDataMock }: TestCycleContext) => {
+  test: async ({ target: { getByTestId } }: TestCycleContext) => {
     await waitFor(() => {
       expect(getByTestId("placeholder")).toBeVisible();
     });
