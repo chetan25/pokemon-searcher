@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-const DUMMY_DATA = [
+export const DUMMY_DATA = [
     {
     "number": "1",
     "name": "Bulbasaur",
@@ -53,8 +53,10 @@ export const handlers = [
         console.log('mocked fired')
       // Persist user's authentication in the session
     //   sessionStorage.setItem('is-authenticated', 'true')
-      return res(
-        ctx.json(DUMMY_DATA),
+     return res(
+       ctx.delay(1000), 
+
+        ctx.json({pokemon: DUMMY_DATA}),
         ctx.status(200),
       )
     }),
@@ -65,7 +67,7 @@ export const handlers = [
     //   sessionStorage.setItem('is-authenticated', 'true')
       setTimeout(() => {
         return res(
-          ctx.json(DUMMY_DATA),
+          ctx.json({pokemon: DUMMY_DATA}),
           ctx.status(200),
         )
       }, 200)

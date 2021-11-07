@@ -27,7 +27,7 @@ const DisplayPlaceholder = () => {
     const styles = useStyles();
 
     return (
-        <Box className={styles.placeholderWrapper}>
+        <Box className={styles.placeholderWrapper} data-testid="placeholder">
             <Grid container spacing={1}>
                 <Grid item xs={5}>
                    <Skeleton variant="rectangular" className={styles.imageHolder} />

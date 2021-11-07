@@ -11,18 +11,18 @@ const StoreContext = createContext<[StoreState, StoreDispatch]>([
     () => {}
 ]);
 
-export const GlobalStateProvider = ({children}: {children: React.ReactNode}) => {
+
+
+export const GlobalStateProvider = (
+    {children, services, actions}: {children: React.ReactNode, services?: any, actions?: any}
+) => {
     const searchMachine = createSearchMacine(
         'idle',
-        ''
+        '',
+        services,
+        actions
     );
-    
-    const [state, send] = useMachine(searchMachine, {
-        // services: {
-        // }
-        // actions: {
-        // }
-    });
+    const [state, send] = useMachine(searchMachine);
 
     return (
         <StoreContext.Provider value={[state, send]}>

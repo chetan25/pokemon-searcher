@@ -17,6 +17,8 @@ export interface SearchContext {
   searchKey: string;
   results: any;
   errorMessage: string | null;
+  testSubmitSuccessCount: number;
+  testSubmitErrorCount: number
 } 
 
 export type SearchState = 
@@ -46,7 +48,8 @@ export type SearchState =
 };  
 
 
-const searchPokemon = (value: string) => {
+export const searchPokemon = (value: string) => {
+  console.log('sdsdsdds');
   return axios.get(`/api/pokemon/${value}`);
 }
 
@@ -59,7 +62,7 @@ const updatSearchValue = assign<SearchContext, any>({
 
 const updateSearchResults = assign<SearchContext, any>({
   results: (_: any, event: { data: any }) => {
-   
+    console.log(event, 'event');
     return event.data.data.pokemon;
   }
 });
@@ -83,21 +86,23 @@ const isInputValid = (context: SearchContext) => {
   return context.searchKey && context.searchKey.length > 1 ? true : false;
 }
 
-export const createSearchMacine = (
-    initialState: string,
-    initialContextValue: string
-) => {
-    // context, event, state
-   return createMachine<SearchContext, SearchEvent, SearchState>({
+export const getMachineDefinition = (initialState: string, initialContextValue: string) => {
+    return {
       id: 'searchMachine',
       initial: initialState,
       context: {
         searchKey: initialContextValue,
         results: null,
-        errorMessage: null
+        errorMessage: null,
+        testSubmitSuccessCount: 0,
+        testSubmitErrorCount: 0
       },
       states: {
-        idle: { },
+        idle: { 
+          on: {
+            'ON_INPUT_FOCUS': 'inputFocus'
+          }
+        },
         inputFocus: {
           on: {
             'INPUT_CHANGED': [
@@ -126,41 +131,77 @@ export const createSearchMacine = (
             submiting: {
               invoke: {
                 id: 'searchPokemon',
-                src: (context: SearchContext) => searchPokemon(context.searchKey),
+                src: 'getPokemonData',
                 onDone: {
-                  target: '#searchMachine.displayResults',
-                  actions: 'updateSearchResults'
+                  target: '#searchMachine.displayResults'
                 },
                 onError: {
-                  target: '#searchMachine.failure',
-                  actions: 'updateErrorState'
+                  target: '#searchMachine.failure'
                 }
               }
             },
           }
         },
-        displayResults: { },
+        displayResults: { 
+          entry: 'updateSearchResults',
+          on: {
+            'INPUT_CHANGED': [
+              {
+                actions: ['updatSearchValue']
+              }
+            ]
+          }
+        },
         failure: {
+          entry: 'updateErrorState',
           on: {
               // ON_RETRY: 'submitting'
           }
         }
       },
-      on: {  
+      on: { 
+        'ON_INPUT_FOCUS': 'inputFocus', 
         'ON_SUBMIT':  {
             target: 'onSearch'
-        },
-        'ON_INPUT_FOCUS': 'inputFocus'
+        }
+      }
     }
-   }, {
-    actions: {
-      updatSearchValue: updatSearchValue,
-      updateSearchResults: updateSearchResults,
-      updateErrorState: updateErrorState,
-      resetResults: resetResults
+}
+
+export const machineActions = {
+  updatSearchValue: updatSearchValue,
+    updateSearchResults: updateSearchResults,
+    updateErrorState: updateErrorState,
+    resetResults: resetResults
+}
+ 
+ export const machineGaurds = {
+  isInputValid: isInputValid
+ }
+
+export const createSearchMacine = (
+    initialState: string,
+    initialContextValue: string,
+    services: {
+      getPokemonData: any
+    } = {
+      getPokemonData: (context: SearchContext) => searchPokemon(context.searchKey)
     },
-    guards: {
-      isInputValid: isInputValid
+    overrideActions: {} = {}
+) => {
+   
+  const machineDefinition = getMachineDefinition(initialState, initialContextValue)
+    // context, event, state
+   return createMachine<SearchContext, SearchEvent, SearchState>(
+     machineDefinition, {
+      actions: {
+        ...machineActions,
+        ...overrideActions
+      },
+      guards: machineGaurds,
+      services: {
+       ...services
+      }
     }
-   })
+   )
 }

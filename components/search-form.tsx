@@ -46,12 +46,14 @@ const SearchForm: NextPage = () => {
         <InputLabel htmlFor="pokemon-search">Pokemon Name</InputLabel>
         <Input
             id="pokemon-search"
+            data-testid="pokemon-search"
             value={searchKey}
             onChange={handleChange}
             onFocus={handleFocus}
             aria-describedby="pokemon-search-text"
         />
         <LoadingButton
+          id='search'
           loading={state.matches('onSearch.submiting')}
           loadingIndicator="Searching..." 
           variant="outlined"

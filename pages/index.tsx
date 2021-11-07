@@ -27,7 +27,7 @@ const Home: NextPage = () => {
   const { results } = state.context;
 
   return (
-    <div>
+    <>
       <SearchForm />
       {
         state.matches('onSearch.submiting')  ?  <DisplayPlaceholder /> : null 
@@ -38,7 +38,7 @@ const Home: NextPage = () => {
       {
         state.matches('failure') ? <Error /> : null
       }
-    </div>
+    </>
   )
 }
 

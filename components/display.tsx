@@ -98,7 +98,7 @@ const DisplayResults = () => {
 
       
     return (
-        <Box className={styles.displayWrapper}>
+        <Box className={styles.displayWrapper} data-testid="results-container">
             {/* <Box sx={{ flexGrow: 1, border: '2px solid grey', padding: '2rem', minHeight: '80vh' }}> */}
                 <Grid container spacing={1} className={styles.gridContainer}>
                     <Grid item xs={5} className={styles.imageGrid}>
@@ -111,10 +111,10 @@ const DisplayResults = () => {
                                 width={300}
                                 height={300}
                             />
-                           <Typography variant="h3" gutterBottom component="h3" className={styles.pokemonName}>
+                           <Typography  data-testid="pokemon-name" variant="h3" gutterBottom component="h3" className={styles.pokemonName}>
                               {pokemonData.name}
                             </Typography>
-                            <Typography variant="subtitle2" gutterBottom component="div">
+                            <Typography variant="subtitle2" gutterBottom component="p">
                                {pokemonData.description}
                             </Typography>
                         </Box>
@@ -137,7 +137,7 @@ const DisplayResults = () => {
                                                 sx={{ display: 'inline', fontSize: '1.2em' }}
                                                 variant="caption"
                                                 gutterBottom
-                                                component="div"
+                                                component="span"
                                                 color="text.primary"
                                                 className={styles.textMargin}
                                             >
@@ -161,7 +161,7 @@ const DisplayResults = () => {
                                                 sx={{ display: 'inline', fontSize: '1.2em' }}
                                                 variant="caption"
                                                 gutterBottom
-                                                component="div"
+                                                component="span"
                                                 color="text.primary"
                                                 className={styles.textMargin}
                                             >
@@ -185,7 +185,7 @@ const DisplayResults = () => {
                                                 sx={{ display: 'inline', fontSize: '1.2em' }}
                                                 variant="caption"
                                                 gutterBottom
-                                                component="div"
+                                                component="span"
                                                 color="text.primary"
                                                 className={styles.textMargin}
                                             >
@@ -194,7 +194,7 @@ const DisplayResults = () => {
                                                        const abilities = pokemonData.abilities[key].join(', ');
                                                        const abilityKey = key.charAt(0).toUpperCase() + key.slice(1)
                                                        return (
-                                                           <p key={key}>{`${abilityKey} abilities are ${abilities}`}</p>
+                                                           <span key={key}>{`${abilityKey} abilities are ${abilities}`}</span>
                                                         )
                                                    })
                                                }
@@ -217,7 +217,7 @@ const DisplayResults = () => {
                                                 sx={{ display: 'inline', fontSize: '1.2em' }}
                                                 variant="caption"
                                                 gutterBottom
-                                                component="div"
+                                                component="span"
                                                 color="text.primary"
                                                 className={styles.textMargin}
                                             >
@@ -240,7 +240,7 @@ const DisplayResults = () => {
                                                 sx={{ display: 'inline', fontSize: '1.2em' }}
                                                 variant="caption"
                                                 gutterBottom
-                                                component="div"
+                                                component="span"
                                                 color="text.primary"
                                                 className={styles.textMargin}
                                             >
@@ -265,7 +265,7 @@ const DisplayResults = () => {
                                                 sx={{ display: 'inline', fontSize: '1.2em' }}
                                                 variant="caption"
                                                 gutterBottom
-                                                component="div"
+                                                component="span"
                                                 color="text.primary"
                                                 className={styles.textMargin}
                                             >
@@ -290,7 +290,7 @@ const DisplayResults = () => {
                                                 sx={{ display: 'inline', fontSize: '1.2em' }}
                                                 variant="caption"
                                                 gutterBottom
-                                                component="div"
+                                                component="span"
                                                 color="text.primary"
                                                 className={styles.textMargin}
                                             >
@@ -319,7 +319,7 @@ const DisplayResults = () => {
                                                             sx={{ display: 'inline', fontSize: '1.2em' }}
                                                             variant="caption"
                                                             gutterBottom
-                                                            component="div"
+                                                            component="span"
                                                             className={styles.textMargin}
                                                             color={pokemonData.name === name ? 'blue' :  "text.primary"}
                                                         >
